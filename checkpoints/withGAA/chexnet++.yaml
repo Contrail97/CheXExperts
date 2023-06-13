@@ -1,0 +1,108 @@
+model:
+  backbone: DenseNet121   #--- DenseNet121, DenseNet169, DenseNet201
+  backend:  Unet++        #--- Unet, Unet+, Unet++
+  global_pool: "MAX"      #--- AVG, MAX, PCAM, AVG_MAX, AVG_MAX_LSE, EXP, LINEAR, LSE
+  norm_type: "BatchNorm"  #--- BatchNorm, GroupNorm, InstanceNorm
+  attention_map: "None"   #--- CAM, SAM, FPA, None
+  lse_gamma: 0.5          #--- for AVG_MAX_LSE, LSE
+  fc_bn: False            #--- classifier FC batch norm
+  fc_drop: 0.0            #--- classifier FC dropout
+  heatmap_size: 64        #--- imgtrans_size/2, imgtrans_size/8, imgtrans_size/16, imgtrans_size/32
+  num_init_features: 64   #--- for DenseNet init
+  check_point :      #--- load the checkpoing of model and resume training
+  load_pretrained_backbone : True #--- True, False
+
+train:
+  batch_size: 8
+  max_epoch: 50
+  optimizer: "Adam"
+  lr: 0.0001
+  lr_factor: 0.1
+  lr_epochs: [2]
+  momentum: 0.9
+  weight_decay: 0.00001
+  criterion: ["PCAM_BCE", "SoftConvergenceLoss"]   #--- BCE, PCAM_BCE, FocalLoss, SoftConvergenceLoss
+
+  focal_alpha: 0.25         #--- for FocalLoss
+  focal_gamma: 2            #--- for FocalLoss
+  scl_alpha: 0.1            #--- for SoftConvergenceLoss
+  model_save_path: ./checkpoints
+
+val_test:
+  batch_size: 10
+  retinanet_path : ./retinanet/models/trained_without_neg_sample_res101/csv_retinanet_epoch3.pt
+  model_path: ./checkpoints/best_auc_model26-0.8419458151267506.pth.tar
+
+heatmap:
+  show_heatmap: False
+  heatmap_save_path:
+
+cam_list:  ['XGradCAM', 'GradCAM', 'LayerCAM', 'HiResCAM']
+cam_weight:
+  {                                        # Disease \ CAM | GradCAM | LayerCAM |  XGradCAM | HiResCAM
+    "Atelectasis" :[0.0, 0.0, 1.0, 0.0],   # Atelectasis   |
+    "Cardiomegaly":[0.0, 1.0, 0.0, 0.0],   # Cardiomegaly  |
+    "Effusion"    :[1.0, 0.0, 0.0, 0.0],   # Effusion      |
+    "Infiltration":[0.0, 0.0, 1.0, 0.0],   # Infiltration  |
+    "Mass"        :[0.0, 0.0, 0.0, 1.0],   # Mass          |
+    "Nodule"      :[0.0, 0.0, 0.0, 1.0],   # Nodule        |
+    "Pneumonia"   :[0.0, 0.0, 1.0, 0.0],   # Pneumonia     |
+    "Pneumothorax":[1.0, 0.0, 0.0, 0.0]    # Pneumothorax  |
+  }
+#  {                                        # Disease \ CAM | GradCAM | LayerCAM |  XGradCAM | HiResCAM
+#    "Atelectasis" :[ 1.0, 1.0, 1.0, 1.0],   # Atelectasis   |
+#    "Cardiomegaly":[ 1.0, 1.0, 1.0, 1.0],   # Cardiomegaly  |
+#    "Effusion"    :[ 1.0, 1.0, 1.0, 1.0],   # Effusion      |
+#    "Infiltration":[ 1.0, 1.0, 1.0, 1.0],   # Infiltration  |
+#    "Mass"        :[ 1.0, 1.0, 1.0, 1.0],   # Mass          |
+#    "Nodule"      :[ 1.0, 1.0, 1.0, 1.0],   # Nodule        |
+#    "Pneumonia"   :[ 1.0, 1.0, 1.0, 1.0],   # Pneumonia     |
+#    "Pneumothorax":[ 1.0, 1.0, 1.0, 1.0]    # Pneumothorax  |
+#  }
+
+
+dataset:
+  num_classes: 14
+  num_workers: 6
+  class_names: [ 'Atelectasis', 'Cardiomegaly', 'Effusion', 'Infiltration', 'Mass', 'Nodule', 'Pneumonia',
+    'Pneumothorax', 'Consolidation', 'Edema', 'Emphysema', 'Fibrosis', 'Pleural_Thickening', 'Hernia']
+
+  #---- path to images folder
+  images_path: D:\dataset\CXR14\images
+  segment_path: D:\dataset\CXR14\segmentations
+
+  #---- path to split file
+  file_train: ./dataset/train.csv
+  file_val:   ./dataset/val.csv
+  file_test:  ./dataset/test.csv
+  file_bbox:  ./dataset/val_bbox.csv
+
+  #---- data transform configs
+  datatransforms:
+    train: [ROICrop, ColorJitter, RandomResizedCrop, RandomHorizontalFlip, ToTensor, SegmentationPrep, Normalize]
+    val: [ROICrop, Resizer, ToTensor, SegmentationPrep, Normalize]
+    kwargs:
+      #---- Parameters related to image transforms: size of the down-scaled image, cropped image
+      imgtrans_size: 512                  #--- for resize image
+      imgtrans_scale: [0.8, 1.0]          #--- for RandomResizedCrop
+      mormal_mean: [0.485, 0.456, 0.406]  #--- for Normalize
+      mormal_std: [0.229, 0.224, 0.225]
+      affine_degrees: [-5, 5]             #--- for RandomAffine
+      affine_translate: [0.0, 0.0]
+      affine_scale: [1.0, 1.0]
+      affine_fill: 0
+      jitter_brightness: 0                #--- for ColorJitter
+      jitter_contrast: [1.0 , 1.6]
+      jitter_saturation: 0
+      jitter_hue: 0
+      
+logger:
+  enable: True
+  log_path: ./logs/
+  Rotating: W5
+
+wandb:
+  enable: False
+
+#---- train / test / heatmap / localization / CAM / multCAM
+mode: CAM

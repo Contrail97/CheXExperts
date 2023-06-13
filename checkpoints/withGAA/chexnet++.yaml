@@ -105,4 +105,4 @@ wandb:
   enable: False
 
 #---- train / test / heatmap / localization / CAM / multCAM
-mode: CAM
+mode: train

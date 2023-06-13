@@ -31,34 +31,33 @@ Multi expert fusion disease diagnosis model CheXExperts achieved an AUC score of
 * Move the csv_retinanet_epoch3.pt to the CheXExperts/retinanet/models/trained_without_neg_sample_res101 folder.
 
 ## Usage
-*
 * For verifying CheXExpert:
-*   Open the CheXExperts\cfgs\chexnet++.yaml and edit the following fields to your own dataset directory:
-*       images_path: D:\dataset\CXR14\images
-*       segment_path: D:\dataset\CXR14\segmentations
-*   Run **python Main.py** to run verifying.
-*
-*
-* For Training CheXExperts:
-*   1.Training The CheXMHNet without GAA.
-*     Copy the CheXExperts\checkpoints\withoutGAA\chexnet++.yaml to CheXExperts\cfgs\ , backup the original chexnet++.yaml file.
-*     Open the chexnet++.yaml and edit the following fields to your own dataset directory:
-*       images_path: D:\dataset\CXR14\images
-*       segment_path: D:\dataset\CXR14\segmentations
-*     Run **python Main.py** to run Training
-*   2.Training The CheXMHNet with GAA.
-*     Copy the CheXExperts\checkpoints\withGAA\chexnet++.yaml to CheXExperts\cfgs\ , backup the original chexnet++.yaml file.
-*     Open the chexnet++.yaml and edit the following fields to your own dataset directory:
-*       images_path: D:\dataset\CXR14\images
-*       segment_path: D:\dataset\CXR14\segmentations
-*     Run **python Main.py** to run Training
+   Open the CheXExperts\cfgs\chexnet++.yaml and edit the following fields to your own dataset directory:  
+   images_path: D:\dataset\CXR14\images  
+   segment_path: D:\dataset\CXR14\segmentations  
+   Run **python Main.py** to run verifying.  
+
+* For Training CheXExperts:  
+   1.Training The CheXMHNet without GAA.  
+     Copy the CheXExperts\checkpoints\withoutGAA\chexnet++.yaml to CheXExperts\cfgs\ , backup the original chexnet++.yaml file.  
+     Open the chexnet++.yaml and edit the following fields to your own dataset directory:  
+     images_path: D:\dataset\CXR14\images  
+     segment_path: D:\dataset\CXR14\segmentations  
+     Run **python Main.py** to run Training  
+     
+   2.Training The CheXMHNet with GAA.  
+     Copy the CheXExperts\checkpoints\withGAA\chexnet++.yaml to CheXExperts\cfgs\ , backup the original chexnet++.yaml file.  
+     Open the chexnet++.yaml and edit the following fields to your own dataset directory:  
+     images_path: D:\dataset\CXR14\images  
+     segment_path: D:\dataset\CXR14\segmentations  
+     Run **python Main.py** to run Training  
 
 
 ## Results
 
 
 ## Experimental environment
-GPU RTX 3060 12GB
-CPU I5 10400F
-Mem 16GB
+GPU RTX 3060 12GB  
+CPU I5 10400F  
+Mem 16GB  
 

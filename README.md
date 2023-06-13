@@ -2,6 +2,8 @@
 
 Multi expert fusion disease diagnosis model CheXExperts achieved an AUC score of 0.85 and an IoR score of 0.75 in the CXR14 dataset.
 
+![alt text](checkpoints/图片1.png)
+
 ## Prerequisites
 * Python 3.7
 * matplotlib==3.4.3

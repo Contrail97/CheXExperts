@@ -24,7 +24,7 @@ Multi expert fusion disease diagnosis model CheXExperts achieved an AUC score of
 * Download the ChestX-ray14 database from [here](https://nihcc.app.box.com/v/ChestXray-NIHCC/folder/37178474737)
 * Unpack archives in separate directories (e.g. images_001.tar.gz into images_001)
 * 
-* Download the trained models and cropped chest X-ray images [here]([https://nihcc.app.box.com/v/ChestXray-NIHCC/folder/37178474737](https://drive.google.com/drive/folders/1sq13RkeoeRE8n7uibaEMDncz9wG8JZ4u))
+* Download the trained models and cropped chest X-ray images [here](https://drive.google.com/drive/folders/1sq13RkeoeRE8n7uibaEMDncz9wG8JZ4u)
 * Unpack segmentations.tar.gz to the same level directory as ChestX-ray14 database.
 * Move the best_auc_model26-0.8419458151267506.pth.tar to the CheXExperts/checkpoints/withGAA folder.
 * Move the best_auc_model29-0.8544614168758137.pth.tar to the CheXExperts/checkpoints/withoutGAA folder.
